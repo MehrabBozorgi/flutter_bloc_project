@@ -34,27 +34,6 @@ class ErrorExceptions implements Exception {
   }
 }
 
-//   fromDioError(DioError dioError) {
-//     switch (dioError.type) {
-//       case DioErrorType.cancel:
-//         return "Request to API server was cancelled";
-//       case DioErrorType.connectTimeout:
-//         return "Connection timeout with API server";
-//       case DioErrorType.other:
-//         return "Connection to API server failed due to internet connection";
-//       case DioErrorType.receiveTimeout:
-//         return "Receive timeout in connection with API server";
-//       // case DioErrorType.response:
-//       //   return handleError(dioError.response?.statusCode);
-//       case DioErrorType.sendTimeout:
-//         return "Send timeout in connection with API server";
-//       default:
-//         return "Something went wrong";
-//     }
-//   }
-//
-//   late String message;
-//
 String handleError(int? statusCode) {
   switch (statusCode) {
     case 400:
@@ -67,6 +46,4 @@ String handleError(int? statusCode) {
       return 'Oops something went wrong';
   }
 }
-//
-//   @override
-//   String toString() => message;
+
