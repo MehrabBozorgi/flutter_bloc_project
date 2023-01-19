@@ -34,16 +34,5 @@ class ErrorExceptions implements Exception {
   }
 }
 
-String handleError(int? statusCode) {
-  switch (statusCode) {
-    case 400:
-      return 'Bad request';
-    case 404:
-      return '404';
-    case 500:
-      return 'Internal server error';
-    default:
-      return 'Oops something went wrong';
-  }
-}
+
 
