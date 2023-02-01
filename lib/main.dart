@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_call_api_bloc/user/bloc/user_bloc.dart';
-import 'package:flutter_call_api_bloc/user/screens/first_screen.dart';
 
 import 'error_handler/check_connection/check_connection_bloc.dart';
-import 'user/services/user_repository.dart';
+import 'feature/user/bloc/user_bloc.dart';
+import 'feature/user/screens/first_screen.dart';
+import 'feature/user/services/user_repository.dart';
 
 void main() {
   runApp(const MyApp());

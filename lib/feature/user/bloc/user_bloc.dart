@@ -5,9 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_call_api_bloc/error_handler/custom_error.dart';
 import 'package:flutter_call_api_bloc/error_handler/error_exception.dart';
-import 'package:flutter_call_api_bloc/user/model/user_model.dart';
-
-import '../../cosntance/enum.dart';
+import '../../../cosntance/enum.dart';
+import '../model/user_model.dart';
 import '../services/user_repository.dart';
 
 part 'user_event.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_call_api_bloc/tools/snack_bar/snack_bar_widget.dart';
-import 'package:flutter_call_api_bloc/user/bloc/user_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../cosntance/enum.dart';
+import '../../../cosntance/enum.dart';
+import '../bloc/user_bloc.dart';
 
 class FirstScreen extends StatefulWidget {
   const FirstScreen({Key? key}) : super(key: key);
@@ -29,10 +29,10 @@ class _FirstScreenState extends State<FirstScreen> {
           if (state.status == Status.loading) {
             return const ShimmerEffect();
           } else if (state.status == Status.complete) {
-            return  CompleteScreenWidget(state: state);
+            return CompleteScreenWidget(state: state);
           } else if (state.status == Status.error) {
             return RefreshIndicator(
-              onRefresh: () async{
+              onRefresh: () async {
                 context.read<UserBloc>().add(FetchUserEvent());
               },
               child: ListView(
@@ -60,14 +60,16 @@ class _FirstScreenState extends State<FirstScreen> {
 
 class CompleteScreenWidget extends StatelessWidget {
   const CompleteScreenWidget({
-    Key? key, required this.state,
+    Key? key,
+    required this.state,
   }) : super(key: key);
 
   final UserState state;
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async{
+      onRefresh: () async {
         context.read<UserBloc>().add(FetchUserEvent());
       },
       child: ListView.separated(

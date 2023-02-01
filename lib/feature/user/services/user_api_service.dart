@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../cosntance/domain.dart';
+import '../../../cosntance/domain.dart';
 
 class UserApiService {
   //time by millisecond
@@ -19,6 +19,7 @@ class UserApiService {
     _dio.options.receiveTimeout = 15000;
     //response from server time out
     _dio.options.sendTimeout = 15000;
+    //
     final Response response = await _dio.getUri(uri);
     print(response.data);
     return response;
