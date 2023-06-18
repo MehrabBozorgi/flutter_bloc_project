@@ -1,34 +1,13 @@
 part of 'user_bloc.dart';
 
-class UserState extends Equatable {
-  final Status status;
-  final List<UserModel> userModel;
-  final CustomError error;
+class UserState {
+  UserEvent userDataEvent;
 
-  const UserState({
-    required this.status,
-    required this.userModel,
-    required this.error,
-  });
+  UserState({required this.userDataEvent});
 
-  factory UserState.initial() => const UserState(
-        status: Status.initial,
-        userModel: [],
-        error: CustomError(),
-      );
-
-  @override
-  List<Object> get props => [status, userModel, error];
-
-  UserState copyWith({
-    Status? status,
-    List<UserModel>? userModel,
-    CustomError? error,
-  }) {
-    return UserState(
-      status: status ?? this.status,
-      userModel: userModel ?? this.userModel,
-      error: error ?? this.error,
-    );
+  UserState copyWith({UserEvent? newUserDataStatus}) {
+    return UserState(userDataEvent: newUserDataStatus ?? userDataEvent);
   }
+
+  factory UserState.initial() => UserState(userDataEvent: UserDataInitial());
 }

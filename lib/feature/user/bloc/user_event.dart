@@ -1,10 +1,22 @@
 part of 'user_bloc.dart';
 
-abstract class UserEvent extends Equatable {
-  const UserEvent();
+@immutable
+abstract class UserEvent {}
+
+class UserDataFetch extends UserEvent {}
+
+class UserDataInitial extends UserEvent {}
+
+class UserDataLoading extends UserEvent {}
+
+class UserDataCompleted extends UserEvent {
+  final List<UserModel> userModel;
+
+  UserDataCompleted(this.userModel);
 }
 
-class FetchUserEvent extends UserEvent {
-  @override
-  List<Object?> get props => throw UnimplementedError();
+class UserDataError extends UserEvent {
+  final String errorMessage;
+
+  UserDataError(this.errorMessage);
 }

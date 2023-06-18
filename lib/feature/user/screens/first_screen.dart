@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_call_api_bloc/feature/user/model/user_model.dart';
 import 'package:flutter_call_api_bloc/tools/snack_bar/snack_bar_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../cosntance/enum.dart';
 import '../bloc/user_bloc.dart';
 
 class FirstScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
-    context.read<UserBloc>().add(FetchUserEvent());
+    context.read<UserBloc>().add(UserDataFetch());
     super.initState();
   }
 
@@ -24,34 +24,52 @@ class _FirstScreenState extends State<FirstScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocConsumer<UserBloc, UserState>(
+      body: BlocBuilder<UserBloc, UserState>(
+        buildWhen: (previous, current) {
+          if (previous.userDataEvent == current.userDataEvent) {
+            return false;
+          }
+          return true;
+        },
         builder: (context, state) {
-          if (state.status == Status.loading) {
+          if (state.userDataEvent is UserDataLoading) {
             return const ShimmerEffect();
-          } else if (state.status == Status.complete) {
-            return CompleteScreenWidget(state: state);
-          } else if (state.status == Status.error) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<UserBloc>().add(FetchUserEvent());
-              },
-              child: ListView(
+          }
+          if (state.userDataEvent is UserDataCompleted) {
+            UserDataCompleted userDataCompleted =
+                state.userDataEvent as UserDataCompleted;
+            List<UserModel> userModel = userDataCompleted.userModel;
+
+            return CompleteScreenWidget(userModel: userModel);
+          }
+          if (state.userDataEvent is UserDataError) {
+            final UserDataError userDataError =
+                state.userDataEvent as UserDataError;
+
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    state.error.errMsg,
-                    style: const TextStyle(fontSize: 30),
+                    userDataError.errorMessage,
+                    style: const TextStyle(color: Colors.white),
                   ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amber.shade800),
+                    onPressed: () {
+                      /// call all data again
+                      context.read<UserBloc>().add(UserDataFetch());
+                    },
+                    child: const Text("تلاش دوباره"),
+                  )
                 ],
               ),
             );
           }
-          return const Center(
-              child: Text('initial', style: TextStyle(fontSize: 30)));
-        },
-        listener: (context, state) {
-          if (state.status == Status.error) {
-            snackBarErrorWidget(context, state.error.errMsg);
-          }
+
+          return Container();
         },
       ),
     );
@@ -61,23 +79,24 @@ class _FirstScreenState extends State<FirstScreen> {
 class CompleteScreenWidget extends StatelessWidget {
   const CompleteScreenWidget({
     Key? key,
-    required this.state,
+    required this.userModel,
   }) : super(key: key);
 
-  final UserState state;
+  final List<UserModel> userModel;
 
   @override
   Widget build(BuildContext context) {
+    // final helper=userModel.da
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<UserBloc>().add(FetchUserEvent());
+        context.read<UserBloc>().add(UserDataFetch());
       },
       child: ListView.separated(
         separatorBuilder: (context, index) =>
             const Padding(padding: EdgeInsets.all(8.0), child: Divider()),
-        itemCount: state.userModel.length,
+        itemCount: userModel.length,
         itemBuilder: (context, index) {
-          final helper = state.userModel[index];
+          final helper = userModel[index];
           return ListTile(
             title: Text(helper.name),
             subtitle: Text(helper.email),
